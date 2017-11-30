@@ -9,17 +9,20 @@
 - (id)initWithSettings:(NSDictionary *)settings
 {
     if (self = [super init]) {
-        self.settings = settings;
-        self.firebaseClass = [FIRAnalytics class];
-        NSString *deepLinkURLScheme = [self.settings objectForKey:@"deepLinkURLScheme"];
-        if (deepLinkURLScheme) {
-            [FIROptions defaultOptions].deepLinkURLScheme = deepLinkURLScheme;
-            SEGLog(@"[FIROptions defaultOptions].deepLinkURLScheme = %@;", deepLinkURLScheme);
-        }
-        
-        [FIRApp configure];
-        SEGLog(@"[FIRApp Configure]");
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.settings = settings;
+            self.firebaseClass = [FIRAnalytics class];
+            NSString *deepLinkURLScheme = [self.settings objectForKey:@"deepLinkURLScheme"];
+            if (deepLinkURLScheme) {
+                [FIROptions defaultOptions].deepLinkURLScheme = deepLinkURLScheme;
+                SEGLog(@"[FIROptions defaultOptions].deepLinkURLScheme = %@;", deepLinkURLScheme);
+            }
+            
+            [FIRApp configure];
+            SEGLog(@"[FIRApp Configure]");
+        });
     }
+    
     return self;
 }
 
